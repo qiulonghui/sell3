@@ -1,6 +1,6 @@
 # sell3
 
-> A Vue.js project
+> 用于学习的基于VUE2.0的实践项目
 
 ## Build Setup
 
