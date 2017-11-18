@@ -113,7 +113,7 @@
 	    vertical-align: top
 	    img
 	      border-radius:2px
-	  .content
+		.content
 	    display: inline-block
 	    font-size:14px
 	    margin-left: 16px
@@ -273,11 +273,11 @@
 	}
 	.supports .support-item .icon{
 		display: inline-block;
-  	width: 16px;
-  	height: 16px;
+  	width: 12px;
+  	height: 12px;
   	vertical-align: top;
-  	margin-right: 6px;
-  	background-size: 16px 16px;
+  	margin-right: 4px;
+  	background-size: 12px 12px;
   	background-repeat: no-repeat;
 	}
 	.supports .support-item .icon.decrease{

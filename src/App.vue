@@ -15,7 +15,7 @@
 		
 		<!-- 路由出口 -->
   	<!-- 路由匹配到的组件将渲染在这里 -->
-		<router-view></router-view>
+		<router-view v-bind:seller="seller"></router-view>
   </div>
 </template>
 
@@ -38,6 +38,11 @@
 					console.log(this)
 				};
 			});
+		},
+		methods:{
+			selectMenu(){
+				console.log("yyy");
+			}
 		},
 		components:{
 			"v-header": header
