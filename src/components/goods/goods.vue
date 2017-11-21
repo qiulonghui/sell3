@@ -2,7 +2,7 @@
 	<div class="goods">
 		<div class="menu-wrapper" ref="menuWrapper">
 			<ul>
-				<li v-for="(item,index) in goods" class="menu-item" v-bind:class="{'current':index === currentIndex}" v-on:click="selectMenu(index,$event)" >
+				<li v-for="(item,index) in goods" class="menu-item" v-bind:class="{'current':index === currentIndex}" v-on:click="selectMenu(index)" >
 					<span class="text border-1px">
 						<span v-show="item.type>0" class="icon"
 							v-bind:class="classMap[item.type]"></span>{{item.name}}
@@ -31,7 +31,7 @@
 									<span class="old" v-show="food.oldPrice">¥{{food.oldPrice}}</span>
 								</div>
 								<div class="cartcontrol-wrapper">
-									<cartcontrol v-bind:food="food"></cartcontrol>
+									<cartcontrol v-bind:food="food" v-on:cart-add="cartAdd"></cartcontrol>
 								</div>
 							</div>
 						</li>
@@ -39,7 +39,7 @@
 				</li>
 			</ul>
 		</div>
-		<shopcart v-bind:delivery-price="seller.deliveryPrice" v-bind:min-price="seller.minPrice"></shopcart>
+		<shopcart ref="shopcart" v-bind:select-foods="selectFoods" v-bind:delivery-price="seller.deliveryPrice" v-bind:min-price="seller.minPrice"></shopcart>
 	</div>
 </template>
 
@@ -56,6 +56,7 @@
 				type:Object
 			}
 		},
+
 		data:function(){
 			return {
 				goods:[],
@@ -75,20 +76,30 @@
 						this._calculateHeight();				
 					});
 				}
-			});
-			
+			});			
 		},
 		computed: {
-				currentIndex(){
-					for(let i=0; i<this.listHeight.length; i++){
-						let height1 = this.listHeight[i];
-						let height2 = this.listHeight[i+1]; // 当滚动到最后一个区间时height2为underfind
-						if(!height2||(this.scrollY>=height1 && this.scrollY<height2)){
-							return i;
-						}
+			currentIndex(){
+				for(let i=0; i<this.listHeight.length; i++){
+					let height1 = this.listHeight[i];
+					let height2 = this.listHeight[i+1]; // 当滚动到最后一个区间时height2为underfind
+					if(!height2||(this.scrollY>=height1 && this.scrollY<height2)){
+						return i;
 					}
-					return 0;
 				}
+				return 0;
+			},
+			selectFoods(){
+				let foods = [];
+				this.goods.forEach((good) => {
+					good.foods.forEach((food) => {
+						if(food.count){
+							foods.push(food);
+						}
+					})
+				});
+				return foods;
+			}
 		},
 		methods: {
 			selectMenu:function (index,event){
@@ -99,12 +110,15 @@
 				let el = foodList[index];
 				this.foodsScroll.scrollToElement(el,300);
 			},
-			
+			cartAdd: function (target) {
+	      this.$refs.shopcart.drop(target);
+	   },
 			_initScroll(){
 				this.menuScroll = new BScroll(this.$refs.menuWrapper,{
 					click:true
 				});
 				this.foodsScroll = new BScroll(this.$refs.foodsWrapper,{
+					click:true,
 					probeType: 3
 				});				
 				this.foodsScroll.on("scroll",(pos)=>{
@@ -256,6 +270,11 @@
 .goods .content .price{
 	font-weight: 700;
 	line-height: 24px;
+}
+.goods .content .cartcontrol-wrapper{
+	position: absolute;
+	right: 0;
+	bottom: 12px;
 }
 .goods .price .now{
 	margin-right: 8px;
