@@ -2,7 +2,8 @@
 	<div class="goods">
 		<div class="menu-wrapper" ref="menuWrapper">
 			<ul>
-				<li v-for="(item,index) in goods" class="menu-item" v-bind:class="{'current':index === currentIndex}" v-on:click="selectMenu(index)" >
+				<li v-for="(item,index) in goods" class="menu-item" v-bind:class="{'current':index === currentIndex}" 
+						v-on:click="selectMenu(index,$event)" >
 					<span class="text border-1px">
 						<span v-show="item.type>0" class="icon"
 							v-bind:class="classMap[item.type]"></span>{{item.name}}
@@ -15,7 +16,7 @@
 				<li v-for="item in goods" class="food-list food-list-hook">
 					<h1 class="title">{{item.name}}</h1>
 					<ul>
-						<li v-for="food in item.foods" class="food-item border-1px">
+						<li v-on:click="selectFood(food,$event)" v-for="food in item.foods" class="food-item border-1px">
 							<div class="icon">
 								<img width="57" height="57" v-bind:src="food.icon"/>
 							</div>
@@ -40,6 +41,7 @@
 			</ul>
 		</div>
 		<shopcart ref="shopcart" v-bind:select-foods="selectFoods" v-bind:delivery-price="seller.deliveryPrice" v-bind:min-price="seller.minPrice"></shopcart>
+		<food v-on:cart-add="cartAdd" v-bind:food="selectedFood" ref="food"></food>
 	</div>
 </template>
 
@@ -47,6 +49,7 @@
 	import BScroll from 'better-scroll';
 	import shopcart from '../shopcart/shopcart';
 	import cartcontrol from '../cartcontrol/cartcontrol';
+	import food from '../food/food';
 	
 	const ERR_OK = 0;
 	
@@ -61,7 +64,8 @@
 			return {
 				goods:[],
 				listHeight: [],
-				scrollY: 0
+				scrollY: 0,
+				selectedFood:{}
 			}
 		},
 		created:function(){
@@ -91,6 +95,7 @@
 			},
 			selectFoods(){
 				let foods = [];
+				
 				this.goods.forEach((good) => {
 					good.foods.forEach((food) => {
 						if(food.count){
@@ -102,6 +107,13 @@
 			}
 		},
 		methods: {
+			selectFood:function (food,event){
+				if(!event._constructed){
+					return;
+				}
+				this.selectedFood = food;
+				this.$refs.food.show();
+			},
 			selectMenu:function (index,event){
 				if(!event._constructed){
 					return;
@@ -111,7 +123,10 @@
 				this.foodsScroll.scrollToElement(el,300);
 			},
 			cartAdd: function (target) {
-	      this.$refs.shopcart.drop(target);
+				// 体验优化，异步执行小球下落动画
+				this.$nextTick(() => {
+					this.$refs.shopcart.drop(target);
+				});      
 	   },
 			_initScroll(){
 				this.menuScroll = new BScroll(this.$refs.menuWrapper,{
@@ -138,7 +153,8 @@
 		},
 		components:{
 			shopcart,
-			cartcontrol
+			cartcontrol,
+			food
 		}
 	}
 </script>

@@ -1,14 +1,12 @@
 <template>
 	<div class="cartcontrol">
 		<transition name="move">
-			<div class="cart-decrease" v-show="food.count>0" v-on:click="decreaseCart">
-				<transition name="rotate">
-					<span v-show="food.count>0" class="inner icon-remove_circle_outline"></span>
-				</transition>
+			<div class="cart-decrease" v-show="food.count>0" v-on:click.stop.prevent="decreaseCart">
+				<span v-show="food.count>0" class="inner icon-remove_circle_outline"></span>
 			</div>
 		</transition>
 		<div class="cart-count" v-show="food.count>0">{{food.count}}</div>
-		<div class="cart-add icon-add_circle" v-on:click="addCart"></div>
+		<div class="cart-add icon-add_circle" v-on:click.stop.prevent="addCart"></div>
 	</div>
 </template>
 
@@ -86,10 +84,11 @@
 		opacity: 0;
 		transform: translate3D(24px,0,0);
 	}
-	.rotate-enter-active, .rotate-leave-active{
+	.move-enter-active .inner, .move-leave-active .inner{
 		transition: all 0.4s linear;
 	}
-	.rotate-enter, .rotate-leave-to{
+	.move-enter .inner, .move-leave-to .inner{
 		transform: rotate(180deg);
 	}
+
 </style>

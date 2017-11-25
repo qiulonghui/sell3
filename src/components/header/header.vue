@@ -219,6 +219,7 @@
 	  height: 100%
 	  overflow: auto
 	  background: rgba(7,17,27,0.8)
+	  transition: opacity .5s
 	  .detail-wrapper
 	    width: 100%
 	    min-height: 100%
@@ -316,9 +317,6 @@
 		line-height: 24px;
 		font-size: 12px;
 		margin: 0;
-	}
-	.fade-enter-active, .fade-leave-active {
-	  transition: opacity .5s;
 	}
 	.fade-enter, .fade-leave-to{
 	  opacity: 0;
