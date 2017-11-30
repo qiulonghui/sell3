@@ -28,7 +28,13 @@
 				<split></split>
 				<div class="rating">
 					<h1 class="title">商品评价</h1>
-					<ratingselect v-on:select="selectRating" v-on:toggle="toggleContent" v-bind:select-type="selectType" v-bind:only-content="onlyContent" v-bind:desc="desc" v-bind:ratings="food.ratings"></ratingselect>
+					<ratingselect v-on:select="selectRating" 
+						v-on:toggle="toggleContent" 
+						v-bind:select-type="selectType" 
+						v-bind:only-content="onlyContent" 
+						v-bind:desc="desc" 
+						v-bind:ratings="food.ratings"
+						></ratingselect>
 					<div class="rating-wrapper">
 						<ul v-show="food.ratings && food.ratings.length">
 							<li v-show="needShow(rating.rateType,rating.text)" v-for="rating in food.ratings" class="rating-item border-1px">
@@ -36,7 +42,7 @@
 									<span class="name">{{rating.username}}</span>
 									<img class="avatar" width="12" height="12" v-bind:src="rating.avatar"/>
 								</div>
-								<div class="time">{{rating.rateTime}}</div>
+								<div class="time">{{rating.rateTime | formatDate}}</div>
 								<p class="text">
 									<span v-bind:class="{'icon-thumb_up':rating.rateType===0,'icon-thumb_down':rating.rateType===1}"></span>
 									{{rating.text}}
@@ -54,6 +60,7 @@
 <script type="text/ecmascript-6">
 	import BScroll from 'better-scroll';
 	import Vue from 'vue';
+	import {formatDate} from '../../common/js/date';
 	import cartcontrol from '../cartcontrol/cartcontrol';	
 	import ratingselect from '../ratingselect/ratingselect';
 	import split from '../split/split';
@@ -131,7 +138,12 @@
     	}
      }
 		},
-		
+		filters: {
+			formatDate(time){
+				let date = new Date(time);
+				return formatDate(date,'yyyy-MM-dd hh:mm')
+			}
+		},
 		components: {
 			cartcontrol,
 			ratingselect,
