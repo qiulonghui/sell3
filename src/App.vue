@@ -40,11 +40,9 @@
 			};
 		},
 		created:function(){
-			this.$http.get('/api/seller?id='+this.seller.id).then((response)=>{
-				response = response.body;
-				if(response.errno === ERR_OK){
-					this.seller = Object.assign({},this.seller,response.data);
-				};
+			this.$http.get('/data.json?id='+this.seller.id).then((response)=>{
+				response = response.body.seller;
+				this.seller = Object.assign({},this.seller,response);
 			});
 		},
 		methods:{

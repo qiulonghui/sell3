@@ -25,7 +25,7 @@ const proxyTable = config.dev.proxyTable
 
 const app = express()
 
-const appData = require('../data.json')
+const appData = require('./data.json')
 const seller = appData.seller
 const goods = appData.goods
 const ratings = appData.ratings

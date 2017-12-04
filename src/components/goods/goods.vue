@@ -71,15 +71,13 @@
 		created:function(){
 			this._calculateHeight;
 			this.classMap = ['decrease','discount','special','invoice','guarantee'];
-			this.$http.get("/api/goods").then((response)=>{
-				response = response.body;
-				if(response.errno === ERR_OK){
-					this.goods = response.data;
-					this.$nextTick(() => {					
-						this._initScroll();
-						this._calculateHeight();				
-					});
-				}
+			this.$http.get("/data.json").then((response)=>{
+				response = response.body.goods;
+				this.goods = response;
+				this.$nextTick(() => {					
+					this._initScroll();
+					this._calculateHeight();				
+				});		
 			});			
 		},
 		computed: {
