@@ -111,6 +111,7 @@
 				}
 				this.selectedFood = food;
 				this.$refs.food.show();
+				console.log(this.$refs.shopcart)
 			},
 			selectMenu:function (index,event){
 				if(!event._constructed){
